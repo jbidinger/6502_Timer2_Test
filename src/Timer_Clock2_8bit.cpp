@@ -42,11 +42,18 @@ void setup()
 }
 
 void lcd_update_mode() {
+  lcd.clear();
   lcd.setCursor(0,0); // top left
   if(mode == MODERUNSTOP) {
     lcd.print("Mode: Run       ");
+    lcd.setCursor(0,2);
+    lcd.print("Red pause");
   } else {
     lcd.print("Mode: Singlestep");
+    lcd.setCursor(0,2);
+    lcd.print("Green singlestep");
+    lcd.setCursor(0,3);
+    lcd.print("Red resume");
   }
 }
 void loop()
@@ -82,35 +89,5 @@ void loop()
     }
     lcd_update_mode();
   }
-/*  
-  delay(3000);
-  // stop
-  // Wait for low state since stopping the timer doesn't clear the output pin.
-  while(digitalRead(freqOutputPin) == HIGH) {
-    delay(10);
-  }
-  Serial.println("  Stopping Timer2");
-  timer2_stop();
-//  OCR2A = 0;
-//  TCCR2A = ((1 << WGM21) | (0 << COM2A0));  // Disconnect OC2A so we can control the pin
-//  TCCR2B = (1 << WGM13); // clockbits (prescalar) to zero and no clock source.
 
-  // try pulsing the data pin to see if we have any control
-  delay(1000); // a little delay between PWM and manual.
-  Serial.println("Test pulses");
-  for(int x=1; x < 250; x++) {
-    digitalWrite(freqOutputPin, HIGH);
-//    Serial.print(".");
-    delay(5);
-    digitalWrite(freqOutputPin, LOW);
-    delay(5);
-  }
-//  Serial.println("");
-  delay(3000);
-  Serial.println("  Starting Timer2");
-  timer2_resume();
-//  OCR2A = ocr2aval;
-//  TCCR2A = ((1 << WGM21) | (1 << COM2A0)); // reconnnect OC2A
-//  TCCR2B = (1 << WGM13) | clockBits;
-*/
 }
