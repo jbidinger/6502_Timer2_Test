@@ -9,8 +9,8 @@ const int freqOutputPin = 10;
 
 ISR(TIMER2_COMPA_vect) {
   clockpinstate = digitalRead(freqOutputPin);
-  //Serial.print("* Interrupt: ");
-  //Serial.println(pinstate);
+  Serial.print("* Interrupt: ");
+  Serial.println(clockpinstate);
   
 }
 

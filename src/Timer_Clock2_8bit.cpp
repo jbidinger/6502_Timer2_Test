@@ -6,6 +6,7 @@
 #include "timer2.h"
 #include "buttons.h"
 #include "lcd.h"
+#include "util.h"
 
 #define MODESINGLESTEP  1
 #define MODERUNSTOP     2
@@ -26,32 +27,6 @@ const float freq      = 1.0e6 / period;
 
 #define LED_PIN LED_BUILTIN
 
-void binaryToPaddedString(char *output, byte inputbinary) {
-  int targetStrLen = 8; 
-  char unpadded[20];
-  itoa (inputbinary,unpadded,2); 
-
-    char buf[21] = { 0 };
-    char fill = '0';
-  
-
-    sprintf(output, "%s%s", (char*)memset(buf, fill, targetStrLen - strlen(unpadded)), unpadded);
-}
-/*
-void binaryToPaddedString(char *output, byte inputbinary) {
-  int targetStrLen = 8;           // Target output length  
-  const char *padding="00000000000000000";
-  char unpadded[20];
-  itoa (inputbinary,unpadded,2); 
-  //Serial.println(unpadded);
-  int padLen = targetStrLen - strlen(unpadded); // Calc Padding length
-  if(padLen < 0) padLen = 0;    // Avoid negative length
-  //Serial.println(padLen);
-
-  sprintf(output,"[%*.*s%s]", padLen, padLen, padding, unpadded);  // LEFT Padding 
-  Serial.println(output);
-}
-*/
 
 void setup()
 {
@@ -106,8 +81,10 @@ void loop()
   if( button1_status && mode == MODESINGLESTEP ) {
     Serial.println("Single Step");
     digitalWrite(freqOutputPin, HIGH);
+    clockpinstate = 1; // The ISR doesn't run since it's based off the timer so we'll emulate it.
     delay(10);
     digitalWrite(freqOutputPin, LOW);
+    clockpinstate = 0;
     delay(10);    
   }
 
@@ -119,7 +96,7 @@ void loop()
       Serial.println("  Going to singlestep");
       timer2_stop();
       mode=MODESINGLESTEP;
-    } else if( button2_status && mode==MODESINGLESTEP ) { // Go basck to running mode
+    } else if( button2_status && mode==MODESINGLESTEP ) { // Go back to running mode
       Serial.println("  Going to run");
       timer2_resume();
       mode=MODERUNSTOP;
