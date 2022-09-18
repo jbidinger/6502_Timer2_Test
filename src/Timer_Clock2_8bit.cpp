@@ -36,6 +36,7 @@ void setup()
     lcd_setup();
     button_setup();
 
+/*
     byte x =  0b10111100;
     byte y = ~x;
     char padded[20];
@@ -43,6 +44,7 @@ void setup()
     Serial.println(padded);
     binaryToPaddedString(padded,y);
     Serial.println(padded);
+*/
 
     Serial.print("Period    = ");
     Serial.print(period); 
@@ -80,24 +82,24 @@ void loop()
   // single step pressed and in singlestep mode
   if( button1_status && mode == MODESINGLESTEP ) {
     Serial.println("Single Step");
-    digitalWrite(freqOutputPin, HIGH);
+    digitalWrite(clockOutputPin, HIGH);
     clockpinstate = 1; // The ISR doesn't run since it's based off the timer so we'll emulate it.
     delay(10);
-    digitalWrite(freqOutputPin, LOW);
+    digitalWrite(clockOutputPin, LOW);
     clockpinstate = 0;
     delay(10);    
   }
 
   if( button2_status ) { // button2 always causes a change in state.
     if( button2_status && mode==MODERUNSTOP ) { // We're in running mode
-      while(digitalRead(freqOutputPin) == HIGH) {
+      while(digitalRead(clockOutputPin) == HIGH) {
         delay(10);
       }
-      Serial.println("  Going to singlestep");
+      Serial.println("-  Going to singlestep");
       timer2_stop();
       mode=MODESINGLESTEP;
     } else if( button2_status && mode==MODESINGLESTEP ) { // Go back to running mode
-      Serial.println("  Going to run");
+      Serial.println("-  Going to run");
       timer2_resume();
       mode=MODERUNSTOP;
     }

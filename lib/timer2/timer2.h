@@ -4,10 +4,12 @@
 extern const int ocr2aval;
 extern volatile unsigned char clockpinstate;
 extern const unsigned char clockBits;
-extern const int freqOutputPin;
+extern const int clockOutputPin;
+extern const int clockInterruptPin;
 
 void timer2_setup();
 void timer2_stop();
 void timer2_resume();
+void clockInterruptISR();
 
 #endif

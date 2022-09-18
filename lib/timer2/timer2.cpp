@@ -2,21 +2,33 @@
 #include "timer2.h"
 
 const int ocr2aval  = 255;  // Max for timer2 (255)
-volatile unsigned char clockpinstate;
+volatile unsigned char clockpinstate = LOW;
 const unsigned char clockBits = ( ( 1 << CS22) | ( 1 << CS21) | ( 1 << CS20) );  // prescalar
-const int freqOutputPin = 10;
+const int clockOutputPin = 10;
+const int clockInterruptPin = 19;
 
-
+/*
 ISR(TIMER2_COMPA_vect) {
-  clockpinstate = digitalRead(freqOutputPin);
+  clockpinstate = digitalRead(clockOutputPin);
   Serial.print("* Interrupt: ");
   Serial.println(clockpinstate);
-  
+}
+*/
+
+
+void clockInterruptISR() {
+  cli();
+  //Serial.println("ISR entered");
+  clockpinstate = digitalRead(clockInterruptPin);
+  Serial.print("* Interrupt: ");
+  Serial.println(clockpinstate);
+  sei();
 }
 
 
 void timer2_setup() {
-    pinMode(freqOutputPin, OUTPUT);
+    pinMode(clockOutputPin, OUTPUT);
+    pinMode(clockInterruptPin, INPUT);
 
     cli(); // pause interrupts while we setup. This may not be needed. *shrug*
  
@@ -37,7 +49,7 @@ void timer2_setup() {
 
     // Make sure Compare-match register A interrupt for timer2 is disabled
     //TIMSK2 = 0;
-    TIMSK2 = (1 << OCIE2A);   // Enable interrupt
+    //TIMSK2 = (1 << OCIE2A);   // Enable interrupt
     // This value determines the output frequency
     OCR2A = ocr2aval;
 
@@ -47,10 +59,15 @@ void timer2_setup() {
     timer2_stop();
 
     sei();
+
+  /* In pause mode we don't get the timer interrupt. The solution was to loop back
+   * the timer output to another pin that we can set the interrupt on.
+  */
+  attachInterrupt(digitalPinToInterrupt(clockInterruptPin),clockInterruptISR,CHANGE);
 }
 
 void timer2_stop(){
-    while(digitalRead(freqOutputPin) == HIGH) {
+    while(digitalRead(clockOutputPin) == HIGH) {
     delay(10);
   }
   OCR2A = 0; // Compare value to zero
