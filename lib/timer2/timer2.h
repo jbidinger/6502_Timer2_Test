@@ -3,6 +3,7 @@
 
 extern const int ocr2aval;
 extern volatile unsigned char clockpinstate;
+extern volatile bool clockPinChange;
 extern const unsigned char clockBits;
 extern const int clockOutputPin;
 extern const int clockInterruptPin;

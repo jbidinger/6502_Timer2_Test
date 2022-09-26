@@ -3,6 +3,7 @@
 
 const int ocr2aval  = 255;  // Max for timer2 (255)
 volatile unsigned char clockpinstate = LOW;
+volatile bool clockPinChange = false;
 const unsigned char clockBits = ( ( 1 << CS22) | ( 1 << CS21) | ( 1 << CS20) );  // prescalar
 const int clockOutputPin = 10;
 const int clockInterruptPin = 19;
@@ -20,8 +21,10 @@ void clockInterruptISR() {
   cli();
   //Serial.println("ISR entered");
   clockpinstate = digitalRead(clockInterruptPin);
-  Serial.print("* Interrupt: ");
-  Serial.println(clockpinstate);
+  clockPinChange = true;
+
+  //Serial.print("* Interrupt: ");
+  //Serial.println(clockpinstate);
   sei();
 }
 
@@ -63,7 +66,7 @@ void timer2_setup() {
   /* In pause mode we don't get the timer interrupt. The solution was to loop back
    * the timer output to another pin that we can set the interrupt on.
   */
-  attachInterrupt(digitalPinToInterrupt(clockInterruptPin),clockInterruptISR,CHANGE);
+  attachInterrupt(digitalPinToInterrupt(clockInterruptPin),clockInterruptISR,RISING);
 }
 
 void timer2_stop(){

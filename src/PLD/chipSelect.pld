@@ -1,0 +1,61 @@
+Name            ChipSelect;
+Partno          ChipSelect;
+Revision        01;
+Date            09/26/2022;
+Designer        Jon Bidinger;
+Company         ;
+Location        USA;
+Assembly        None;
+Device          g22v10;
+
+
+/*
+ * Inputs:  All are signals from the 6502, 65C02, 65816
+ */
+Pin 1  =  CLK;
+Pin 2  =  RW;
+Pin 3  =  EXRAM;
+Pin 4  =  A15;
+Pin 5  =  A14;
+Pin 6  =  A13;
+Pin 7  =  A12;
+Pin 8  =  A11;
+Pin 9  =  A10;
+Pin 10 =  A9;
+Pin 11 =  A8;
+
+/*
+ * Outputs:  define outputs - all are simple combinatorial
+ */
+Pin 23 = WE;      /* to RAM and ROM chips */
+Pin 22 = OE;      /* to RAM and ROM chips */
+Pin 21 = RAM_CS;  /* to RAM1 /CS pin */
+Pin 20 = ROM_CS;  /* to ROM  /CS pin */
+Pin 19 = IO0_CS;  /* to IOCS pin */
+Pin 18 = IO1_CS;
+Pin 17 = IO2_CS;
+
+/*
+ * Local variables
+ */
+
+FIELD Address = [A15..A00];
+
+/*
+ * Logic:
+ */
+
+RAM        = Address:[0000..7FFF];
+IO0_SHADOW = Address:[8000..80FF];
+IO1_SHADOW = Address:[8100..81FF];
+IO2_SHADOW = Address:[8200..82FF];
+IO3_SHADOW = Address:[8300..83FF];
+ROM        = Address:[9000..FFFF];
+
+!WE       = CLK & !RW;
+!OE       = CLK & RW;
+!RAM_CS   = RAM;
+!ROM_CS   = ROM;
+!IO0_CS    = IO0_SHADOW;
+!IO1_CS    = IO1_SHADOW;
+!IO2_CS    = IO2_SHADOW;

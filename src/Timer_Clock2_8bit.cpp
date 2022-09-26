@@ -82,12 +82,12 @@ void loop()
   // single step pressed and in singlestep mode
   if( button1_status && mode == MODESINGLESTEP ) {
     Serial.println("Single Step");
+    delay(20);  
     digitalWrite(clockOutputPin, HIGH);
-    clockpinstate = 1; // The ISR doesn't run since it's based off the timer so we'll emulate it.
-    delay(10);
+    //clockpinstate = 1; // The ISR doesn't run since it's based off the timer so we'll emulate it.
+    delay(20);
     digitalWrite(clockOutputPin, LOW);
-    clockpinstate = 0;
-    delay(10);    
+    //clockpinstate = 0;
   }
 
   if( button2_status ) { // button2 always causes a change in state.
