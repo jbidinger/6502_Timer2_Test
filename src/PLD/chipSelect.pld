@@ -14,15 +14,14 @@ Device          g22v10;
  */
 Pin 1  =  CLK;
 Pin 2  =  RW;
-Pin 3  =  EXRAM;
-Pin 4  =  A15;
-Pin 5  =  A14;
-Pin 6  =  A13;
-Pin 7  =  A12;
-Pin 8  =  A11;
-Pin 9  =  A10;
-Pin 10 =  A9;
-Pin 11 =  A8;
+Pin 3  =  A15;
+Pin 4  =  A14;
+Pin 5  =  A13;
+Pin 6  =  A12;
+Pin 7  =  A11;
+Pin 8  =  A10;
+Pin 9  =  A9;
+Pin 10 =  A8;
 
 /*
  * Outputs:  define outputs - all are simple combinatorial
