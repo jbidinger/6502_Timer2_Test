@@ -9,21 +9,21 @@ Location USA;
 Device   g22v10;
 
 
-ORDER: CLK, A15, A14, A13, A12, A11, A10, A9, A8, WE, OE, RAM_CS, ROM_CS, IO0_CS, IO1_CS, IO2_CS; 
+ORDER: CLK, RW, A15, A14, A13, A12, A11, A10, A9, A8, WE, OE, RAM_CS, ROM_CS, IO0_CS, IO1_CS, IO2_CS; 
 
 
 VECTORS:
 $MSG  "Beginning of RAM";
-C00000000*******
+1100000000*******
 $MSG  "end of RAM";
-C01111111*******
+1001111111*******
 $MSG  "IO0";
-C10000000*******
+1110000000*******
 $MSG  "IO1";
-C10000001*******
+1010000001*******
 $MSG  "IO2";
-C10000010*******
+1010000010*******
 $MSG  "ROM Start";
-C10010000*******
+1110010000*******
 $MSG  "ROM END";
-C11111111*******
+1111111111*******

@@ -3,3 +3,12 @@
 .vscode/c_cpp_properties.json
 .vscode/launch.json
 .vscode/ipch
+src/PLD/ChipSelect.jed
+src/PLD/CHIPSELECT.so
+src/PLD/CHIPSELECT.wo
+src/PLD/tmpcsim.im
+src/a.out
+src/PLD/CHIPSELECT.abs
+src/PLD/CHIPSELECT.abs
+src/PLD/P_log.txt
+src/PLD/ChipSelect.jed
