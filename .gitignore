@@ -9,6 +9,5 @@ src/PLD/CHIPSELECT.wo
 src/PLD/tmpcsim.im
 src/a.out
 src/PLD/CHIPSELECT.abs
-src/PLD/CHIPSELECT.abs
 src/PLD/P_log.txt
 src/PLD/ChipSelect.jed
