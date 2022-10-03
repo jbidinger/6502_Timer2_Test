@@ -5,17 +5,15 @@
         ;Setup stack
         ldx #$ff
         txs    
-    ; start ram test here.
-HELLOWORLD:
+
 IOBASE   = $8800
 IOSTATUS = IOBASE + 1
 IOCMD    = IOBASE + 2
 IOCTRL   = IOBASE + 3
 STRNGA   = $00
+SAVEA    = $02
 
-;.org $0300
-
-start:  ;cli
+start:
     lda #<string
     sta STRNGA
     lda #>string
@@ -23,16 +21,12 @@ start:  ;cli
     pha
     tya
     pha
-    jsr ser_init
-;        lda #$0b
-;        sta IOCMD      ; Set command status
-;        lda #$1a
-;        sta IOCTRL     ; 0 stop bits, 8 bit word, 2400 baud
+    jsr ser_init        ; Set baud rate, etc. Only need to do once.
 
 init:   ldy #$00       ; Initialize index
 
 loop:   lda IOSTATUS
-        lda (STRNGA),y   ; Otherwise, load the string pointer
+        lda (STRNGA),y ; Otherwise, load the string pointer
         beq init       ; If the char is 0, re-init
         jsr ser_printchar
         iny            ; Increment string pointer.
@@ -41,7 +35,7 @@ loop:   lda IOSTATUS
         tay
         pla
 
-string: .string "Hello, 6502 world! "
+string: .string "Hello, 6502 world! ",$0A,$0D
 
 ser_init:
     pha
@@ -53,15 +47,15 @@ ser_init:
     rts
 
 ser_printchar:
-        sta $02         ; Need the character back later.
+        sta SAVEA      ; Need the character in "A" back later.
         pha
         tya
         pha
-ser_loop
+ser_loop:
         lda IOSTATUS
         and #$10       ; Is the tx register empty?
         beq ser_loop   ; No, wait for it to empty
-        lda $02        ; Otherwise, load the string pointer
+        lda SAVEA      ; Otherwise, load the string pointer
         sta IOBASE     ; transmit
         pla
         tay
@@ -78,4 +72,4 @@ H2A:
 RAMTEST:
     .org $fffc
     .word start
-    .word RAMTEST
+    .word $0000

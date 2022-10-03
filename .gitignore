@@ -14,3 +14,4 @@ src/PLD/ChipSelect.jed
 src/PLD/CHIPSELECT.pdf
 src/ramtest_symon.out
 samples/
+src/rom.bin
