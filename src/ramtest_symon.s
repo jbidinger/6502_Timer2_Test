@@ -20,32 +20,60 @@ start:  ;cli
     sta STRNGA
     lda #>string
     sta STRNGA + 1
-
-        pha
-        tya
-        pha
-        lda #$0b
-        sta IOCMD      ; Set command status
-        lda #$1a
-        sta IOCTRL     ; 0 stop bits, 8 bit word, 2400 baud
+    pha
+    tya
+    pha
+    jsr ser_init
+;        lda #$0b
+;        sta IOCMD      ; Set command status
+;        lda #$1a
+;        sta IOCTRL     ; 0 stop bits, 8 bit word, 2400 baud
 
 init:   ldy #$00       ; Initialize index
 
 loop:   lda IOSTATUS
-        and #$10       ; Is the tx register empty?
-        beq loop       ; No, wait for it to empty
-;        lda string,x   ; Otherwise, load the string pointer
         lda (STRNGA),y   ; Otherwise, load the string pointer
         beq init       ; If the char is 0, re-init
-        sta IOBASE     ; Otherwise, transmit
-
+        jsr ser_printchar
         iny            ; Increment string pointer.
         jmp loop       ; Repeat write.
         pla
-        txa
+        tay
         pla
 
-string: .byte "Hello, 6502 world! ", 0
+string: .string "Hello, 6502 world! "
+
+ser_init:
+    pha
+    lda #$0b
+    sta IOCMD      ; Set command status
+    lda #$1a
+    sta IOCTRL     ; 0 stop bits, 8 bit word, 2400 baud
+    pla
+    rts
+
+ser_printchar:
+        sta $02         ; Need the character back later.
+        pha
+        tya
+        pha
+ser_loop
+        lda IOSTATUS
+        and #$10       ; Is the tx register empty?
+        beq ser_loop   ; No, wait for it to empty
+        lda $02        ; Otherwise, load the string pointer
+        sta IOBASE     ; transmit
+        pla
+        tay
+        pla
+
+hex2ascii:      ; Pass value in a
+    cmp #10
+    bcc H2A     ; Less than #10
+    adc #6      ; Carry is set so this is really a 7
+H2A:
+    adc #48
+    rts
 
 RAMTEST:
     .org $fffc
