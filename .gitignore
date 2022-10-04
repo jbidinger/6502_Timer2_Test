@@ -15,3 +15,6 @@ src/PLD/CHIPSELECT.pdf
 src/ramtest_symon.out
 samples/
 src/rom.bin
+src/6551_test.out
+src/*.bin
+src/*.out
