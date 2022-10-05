@@ -18,3 +18,5 @@ src/rom.bin
 src/6551_test.out
 src/*.bin
 src/*.out
+Assembly/*.bin
+Assembly/*.out
