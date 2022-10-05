@@ -4,9 +4,6 @@
 
     .org $9000
 START:
-    nop
-    nop
-    nop
     lda #$FF
     sta $00
     sta $01
@@ -17,7 +14,7 @@ START:
     cmp #$FF
     bne OH_FUCK ; We stored a FF got something else back.
     jmp START
-    
+
 OH_FUCK:
     lda #$00
     sta $00
@@ -25,9 +22,9 @@ OH_FUCK:
     jmp OH_FUCK
 
 
-    .org $fff7
-        jmp START ; Go back to 9000, skipping IO region and read NOPs again.  
+;    .org $fff7
+;        jmp START ; Go back to 9000, skipping IO region and read NOPs again.  
     .org $fffA
-    .word $FFFF   ; NMIB
+    .word $0000   ; NMIB
     .word START   ; Jump on boot
-    .word $FFFF   ; IRQB/BRK
+    .word $0000   ; IRQB/BRK

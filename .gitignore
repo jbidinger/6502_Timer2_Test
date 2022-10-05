@@ -20,3 +20,4 @@ src/*.bin
 src/*.out
 Assembly/*.bin
 Assembly/*.out
+python/*.bin
