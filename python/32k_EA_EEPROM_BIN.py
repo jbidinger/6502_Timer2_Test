@@ -4,6 +4,6 @@
 #rom = bytearray([0xEA] * 32768)
 rom = bytearray([0xA9,0xFF] * 16384)
 rom[0x7ffc] = 0x00
-rom[0x7ffd] = 0x90G
+rom[0x7ffd] = 0x90
 with open("rom.bin", "wb") as out_file:
   out_file.write(rom)

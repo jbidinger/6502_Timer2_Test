@@ -1,6 +1,7 @@
 ; vasm6502_oldstyle -Fbin -dotdir -wdc02 ram_test_hardware.s -o ram_test_hardware.bin
 ; xxd -a -o 32768 ram_test_hardware.bin
     .org $8000 ; IO
+    .string "There be deamons here!"
 
     .org $9000
 START:

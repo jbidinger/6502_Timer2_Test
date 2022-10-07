@@ -14,6 +14,8 @@ IOCTRL   = IOBASE + 3
 STRNGA   = $00
 SAVEA    = $02
 
+  .org $8000
+    ; IO Region
   .org $9000
     ;Setup stack
     ldx #$ff

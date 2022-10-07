@@ -156,6 +156,9 @@ void loop()
     read_data_and_addr();
     digitalWrite(clockOutputPin, LOW);
     //clockpinstate = 0;
+  } else if(clockPinChange) {
+      clockPinChange = 0;
+      read_data_and_addr();
   }
 
   if( button2_status ) { // button2 always causes a change in state.
