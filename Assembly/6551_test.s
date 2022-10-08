@@ -55,15 +55,13 @@ ser_init:
     rts
 
 ser_printchar:
-        sta SAVEA      ; Need the character in "A" back later.
         pha
 ser_loop:
         lda IOSTATUS
         and #$10       ; Is the tx register empty?
         beq ser_loop   ; No, wait for it to empty
-        lda SAVEA      ; Otherwise, load the string pointer
+        pla            ; Otherwise, load the string pointer
         sta IOBASE     ; transmit
-        pla
         rts
 
 hex2ascii:      ; Pass value in a
