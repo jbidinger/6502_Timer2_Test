@@ -42,7 +42,7 @@ READ_CHAR_WECHO:
 
 HELLO:
   JSR PRIMM
-	.string "6502",$0A,$0D,">"
+	.string "6502>"
 	RTS
 
 ;HELLO:
@@ -100,6 +100,7 @@ sgl_loop:
     cmp #CR
     bne sgl_notcr
     sta INPUT_BUFFER,x
+    inx
     jsr ser_printchar
     lda #LF
     jsr ser_printchar
@@ -109,8 +110,9 @@ sgl_return:
 sgl_notcr:    
     ; TODO: add checking for backspace, arrows, etc. later.
     sta INPUT_BUFFER,x
+    inx
     jsr ser_printchar
-    jmp sgl_return;
+    jmp sgl_loop;
 
 ser_getchar:
     lda IOSTATUS
