@@ -1,7 +1,8 @@
 #include <Arduino.h>
 #include "timer2.h"
 
-const int ocr2aval  = 255;  // Max for timer2 (255)
+//const int ocr2aval  = 255;  // Max for timer2 (255)
+const int ocr2aval  = 1;  // Max for timer2 (255)
 volatile unsigned char clockpinstate = LOW;
 volatile bool clockPinChange = false;
 const unsigned char clockBits = ( ( 1 << CS22) | ( 1 << CS21) | ( 1 << CS20) );  // prescalar
