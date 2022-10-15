@@ -96,18 +96,19 @@ ser_getline:      ; x returns length of string
     ldx #$00      ; Zero index into buffer
 sgl_loop:
     jsr ser_getchar ; Get next character in A
-    sta INPUT_BUFFER,x
+    
     cmp #CR
     bne sgl_notcr
+    sta INPUT_BUFFER,x
     jsr ser_printchar
     lda #LF
     jsr ser_printchar
 sgl_return:
     pla
     rts
-
 sgl_notcr:    
     ; TODO: add checking for backspace, arrows, etc. later.
+    sta INPUT_BUFFER,x
     jsr ser_printchar
     jmp sgl_return;
 
@@ -119,12 +120,27 @@ ser_getchar:
     rts
 
 hex2ascii:      ; Pass value in a
+    and #$0f
     cmp #10
     bcc H2A     ; Less than #10
     adc #6      ; Carry is set so this is really a 7
 H2A:
     adc #48
     rts
+
+PRBYTE:
+  pha
+  lsr
+  lsr
+  lsr
+  lsr
+  jsr hex2ascii
+  jsr CHAROUT
+  pla
+PRHEX:
+  jsr hex2ascii
+  rts
+
 
 ; Inline printing routine from http://6502.org/source/io/primm.htm
 ; Example for PRIMM:
