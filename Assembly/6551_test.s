@@ -15,6 +15,7 @@ STRNGA   = $00        ; Store the address of the string to print here
 
 CR = $0d
 LF = $0A
+SPACE = $20
 INPUT_BUFFER = $0200
 INPUT_BUFFER_LEN = $FF
 
@@ -30,46 +31,33 @@ START:
 
 MAIN_LOOP:
   jsr HELLO
-READ_CHAR_WECHO:
-  jsr ser_getchar
-  jsr ser_printchar
-  cmp #CR
-  bne READ_CHAR_WECHO
-  lda #LF
-  jsr ser_printchar
+READ_LINE_WECHO:
+  jsr ser_getline
+  jsr PRINT_LINE_HEX
   jmp MAIN_LOOP
 
+PRINT_LINE_HEX:
+  ldx #$00
+plh_loop:
+  lda INPUT_BUFFER,X
+  cmp #CR
+  beq plh_exit
+  jsr PRHEXBYTE
+  lda #SPACE
+  jsr CHAROUT
+  inx
+  jmp plh_loop
+plh_exit:
+  lda #CR
+  jsr CHAROUT
+  lda #LF
+  jsr CHAROUT
+  rts
 
 HELLO:
-  JSR PRIMM
+  jsr PRIMM
 	.string "6502>"
-	RTS
-
-;HELLO:
-;    pha
-;    tya
-;    pha
-;    lda #<string
-;    sta STRNGA
-;    lda #>string
-;    sta STRNGA + 1
-
-;hello_init:   
-;    ldy #$00       ; Initialize index
-
-;hello_loop: 
-;    lda (STRNGA),y ; Otherwise, load the string pointer
-;    beq hello_exit       ; If the char is 0, re-init
-;    jsr ser_printchar
-;    iny            ; Increment string pointer.
-;    jmp hello_loop       ; Repeat write.
-;hello_exit:
-;    pla
-;    tay
-;    pla
-;    rts
-
-;string: .string "Hello, 6502 world! ",$0A,$0D,">"
+	rts
 
 ser_init:
     pha
@@ -130,7 +118,7 @@ H2A:
     adc #48
     rts
 
-PRBYTE:
+PRHEXBYTE:
   pha
   lsr
   lsr
@@ -141,6 +129,7 @@ PRBYTE:
   pla
 PRHEX:
   jsr hex2ascii
+  jsr CHAROUT
   rts
 
 
