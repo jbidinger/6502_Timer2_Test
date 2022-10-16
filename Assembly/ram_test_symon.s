@@ -15,8 +15,29 @@ ZERO_PAGE:
     lda $01
     cmp #$FF
     bne OH_FUCK ; We stored a FF got something else back.
+    ; At this point we have a couple bytes in zero page tested.
+    ; Use them to store the address we are testing.
 
-    jmp ZERO_PAGE
+TEST_START
+    lda #$02
+    sta $00 
+    lda #$00
+    sta $01
+    ldy #$00
+    lda #$FF
+TEST_LOOP:
+    sta ($00),y
+    lda ($00)
+    cmp #$FF
+    bne OH_FUCK
+    iny             ; Counting on this to wrap from #$FF to #$00
+    cpy #$00        ; Did we wrap?
+    bne TEST_LOOP; More on this page
+    inc $01     ; Next Page. $00 always stays zero. We index with Y
+    ldx $01
+    cpx #$80    ; Stop at the end of RAM (32k in this case)
+    bne TEST_LOOP
+    jmp TEST_START
 
 OH_FUCK:
     NOP
